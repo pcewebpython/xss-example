@@ -1,22 +1,9 @@
-# Flask Calculator 
+# xss-example
 
-## To Run
+First, I converted the assignment to a template view instead of just embedded html
 
-All commands to be run from inside the repository directory.
-```
-$ pip install -r requirements.txt
-$ python setup.py
-$ python main.py
-```
+Then I sterilized the input from the user, replacing ( <, > ) with ( &lt, &gt ) and
+stripping ' before saving to the database.
 
-## To Publish to Heroku
-
-All commands to be run from inside the repository directory.
-```
-$ git init                # Only necessary if this is not already a git repository
-$ heroku create
-$ git push heroku master  # If you have any changes or files to add, commit them before you push. 
-$ heroku addons:create heroku-postgresql:hobby-dev
-$ heroku run python setup.py
-$ heroku open
-```
+This way the raw scripts are saved into the data in a clean form instead of being
+sterilized just before rendering.
