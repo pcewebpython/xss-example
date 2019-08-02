@@ -1,5 +1,6 @@
 """ Super basic flask message board """
 import os
+import html
 from flask import Flask, request, render_template
 from model import Message
 
@@ -11,12 +12,7 @@ app = Flask(__name__)
 def home():
     """ View for Message board home page """
     if request.method == "POST":
-        Message(
-            content=request.form["content"]
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .strip("'")
-        ).save()
+        Message(content=html.escape(request.form["content"]).strip("'")).save()
 
     results = [msg.content for msg in Message.select().execute()]
     return render_template("template.jinja2", messages=results)
