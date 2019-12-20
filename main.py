@@ -10,7 +10,7 @@ app = Flask(__name__)
 def home():
 
     if request.method == 'POST':
-        m = Message(content=request.form['content'])
+        m = Message(content=request.form['content'].replace('<', '&lt').replace('>', '&gt'))
         m.save()
 
     body = """
