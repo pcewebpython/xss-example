@@ -1,5 +1,6 @@
 import os
 import base64
+import html
 
 from flask import Flask, request
 from model import Message 
@@ -22,7 +23,6 @@ def home():
     <textarea name="content"></textarea>
     <input type="submit" value="Submit">
 </form>
-
 <h2>Wisdom From Your Fellow Classmates</h2>
 """
     
@@ -31,7 +31,7 @@ def home():
 <div class="message">
 {}
 </div>
-""".format(m.content)
+""".format(html.escape(m.content))
 
     return body 
 
@@ -39,4 +39,3 @@ def home():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 6738))
     app.run(host='0.0.0.0', port=port)
-
