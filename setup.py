@@ -1,4 +1,6 @@
-from model import db, Message 
+""" script setup.py """
 
-db.connect()
-db.create_tables([Message])
+from model import DB, Message 
+
+DB.connect()
+DB.create_tables([Message])
