@@ -1,0 +1,3 @@
+
+rmvirtualenv xssexample
+mkdirtualenv xssexample
