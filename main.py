@@ -1,10 +1,12 @@
 import os
 import base64
+import html
 
 from flask import Flask, request
-from model import Message 
+from model import Message
 
 app = Flask(__name__)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -25,18 +27,17 @@ def home():
 
 <h2>Wisdom From Your Fellow Classmates</h2>
 """
-    
+
     for m in Message.select():
         body += """
 <div class="message">
 {}
 </div>
-""".format(m.content)
+""".format(m.content.replace('<', html.escape("""<""")).replace('>', html.escape(""">""")))
 
-    return body 
+    return body
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 6738))
     app.run(host='0.0.0.0', port=port)
-
