@@ -1,6 +1,6 @@
 import os
 import base64
-
+import html as h
 from flask import Flask, request
 from model import Message 
 
@@ -31,7 +31,7 @@ def home():
 <div class="message">
 {}
 </div>
-""".format(m.content)
+""".format(h.escape(m.content))
 
     return body 
 
