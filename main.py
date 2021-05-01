@@ -1,17 +1,22 @@
 import os
 import base64
+import random
 
-from flask import Flask, request
+from flask import Flask, request, session
 from model import Message 
 
 app = Flask(__name__)
+app.secret_key = '12345678910'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = str(random.randint(10000000, 99999999))
 
     if request.method == 'POST':
-        m = Message(content=request.form['content'])
-        m.save()
+        if request.form.get('csrf_token', None) == session['csrf_token']:
+            m = Message(content=request.form['content'])
+            m.save()
 
     body = """
 <html>
@@ -19,19 +24,23 @@ def home():
 <h1>Class Message Board</h1>
 <h2>Contribute to the Knowledge of Others</h2>
 <form method="POST">
+<input type = "hidden" name="csrf_token" value="{}">
+
     <textarea name="content"></textarea>
     <input type="submit" value="Submit">
 </form>
 
 <h2>Wisdom From Your Fellow Classmates</h2>
-"""
+""".format(session['csrf_token'])
+
     
     for m in Message.select():
         body += """
 <div class="message">
 {}
 </div>
-""".format(m.content)
+""".format(m.content.replace('<', '&lt;').replace('>', '&gt;'))
+
 
     return body 
 
